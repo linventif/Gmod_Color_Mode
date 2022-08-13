@@ -9,6 +9,7 @@ Color_Mode.Language = {
     Mode_Reset          =       "Réinitialisé",
     Mode_Boost          =       "Booster les Couleurs",
     Mode_Save           =       "Enregistrer",
+    Color_Max           =       "Boost Color Max",
     Mode_Load           =       "Chargé la Config",
     Init_Message        =       "Ce serveur utulise Color Mode, pour le configurer tapez !color_mode dans votre chat ou utuliser color_mode dans votre console de dévelopement ( F10 or ² ).",
 --[[       Admin        ]]--

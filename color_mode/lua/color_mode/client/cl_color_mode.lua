@@ -1,8 +1,10 @@
-hook.Add("InitPostEntity", "Ready", function()
-    timer.Simple(5, function()
-        chat.AddText( Color( 100, 100, 255 ), "[ Color Mode ]  ", Color( 255, 255, 255 ), Color_Mode.Language.Init_Message)
+if Color_Mode.Config.Init_Message then
+    hook.Add("InitPostEntity", "Ready", function()
+        timer.Simple(5, function()
+            chat.AddText( Color( 100, 100, 255 ), "[ Color Mode ]  ", Color( 255, 255, 255 ), Color_Mode.Language.Init_Message)
+        end)
     end)
-end)
+end
 
 hook.Add("RenderScreenspaceEffects", "RefreshColors", function()
     DrawColorModify(Color_Mode.Config.Color)
@@ -42,6 +44,14 @@ local Size = {
     x = 710,
     y = 313
 }
+
+net.Receive("color_mode_config_admin_install", function(len, ply)
+    if LocalPlayer():IsUserGroup("superadmin") then
+        RunConsoleCommand("color_mode_config_admin")
+    else
+        notification.AddLegacy(Color_Mode.Language.Access_Refused, 1, 3)
+    end
+end)
 
 net.Receive("color_mode_config_admin_not_install", function(len, ply)
     local Main_Frame = vgui.Create("DFrame")
@@ -246,7 +256,7 @@ local function Color_Mode_Open()
     Num_Slider_6:SetText(Color_Mode.Language.Color)
     Num_Slider_6:SetValue(Color_Mode.Config.Color["$pp_colour_colour"])
     Num_Slider_6:SetMin(0)				
-    Num_Slider_6:SetMax(4)				
+    Num_Slider_6:SetMax(Color_Mode.Config.Color_Max)				
     Num_Slider_6:SetDecimals(2)
     Num_Slider_6.OnValueChanged = function(self, value)
         Color_Mode.Config.Color["$pp_colour_colour"] = math.Round(value, 2)
@@ -350,6 +360,7 @@ local function Color_Mode_Open_Config()
         draw.SimpleText(Color_Mode.Language.Button_Placement, "Trebuchet18", 150, 132, Color(255,255,255,255))
         draw.SimpleText(Color_Mode.Language.Enable_Init_Message, "Trebuchet18", 470, 132, Color(255,255,255,255))
         draw.SimpleText(Color_Mode.Language.Themes, "Trebuchet18", 470, 66, Color(255,255,255,255))
+        draw.SimpleText(Color_Mode.Language.Color_Max, "Trebuchet18", 150, 199, Color(255,255,255,255))
     end
 
     local Button_Close = vgui.Create("DButton", Main_Frame)
@@ -451,11 +462,22 @@ local function Color_Mode_Open_Config()
     ComboBox_Init_Message:SetPos(355, 125)
     ComboBox_Init_Message:SetSize(100, 30)
     ComboBox_Init_Message:SetColor(Color(255,255,255))
-    ComboBox_Init_Message:SetValue("false")
+    if Color_Mode.Config.Init_Message then
+        ComboBox_Init_Message:SetValue("True")
+    else
+        ComboBox_Init_Message:SetValue("False")
+    end
     ComboBox_Init_Message:AddChoice("True")
     ComboBox_Init_Message:AddChoice("False")
     ComboBox_Init_Message.OnSelect = function(self, index, value)
-        notification.AddLegacy(Color_Mode.Language.Feature_in_Dev, 1, 3)
+        notification.AddLegacy(Color_Mode.Language.Config_Save, 0, 3)
+        if value == "True" then
+            Color_Mode.Config.Init_Message = true
+            file.Write("linventif/color_mode.json", util.TableToJSON(Color_Mode.Config))
+        else
+            Color_Mode.Config.Init_Message = false
+            file.Write("linventif/color_mode.json", util.TableToJSON(Color_Mode.Config))
+        end
     end
     ComboBox_Init_Message.Paint = function(s, w, h)
         draw.RoundedBox(4, 0, 0, w, h, UI_Color.Other)
@@ -475,6 +497,31 @@ local function Color_Mode_Open_Config()
         file.Write("linventif/color_mode.json", util.TableToJSON(Color_Mode.Config))
         Main_Frame:Close()
         RunConsoleCommand("color_mode_config")
+    end
+
+    local Color_Max = vgui.Create("DComboBox", Main_Frame)
+    Color_Max:SetPos(35, 192)
+    Color_Max:SetSize(100, 30)
+    Color_Max:SetColor(Color(255,255,255))
+    Color_Max:SetValue(Color_Mode.Config.Color_Max)
+    Color_Max:AddChoice(2)
+    Color_Max:AddChoice(4)
+    Color_Max:AddChoice(8)
+    Color_Max:AddChoice("WTF")
+    Color_Max:AddChoice("I'm blind")
+    Color_Max.OnSelect = function(self, index, value)
+        notification.AddLegacy(Color_Mode.Language.Config_Save, 0, 3)  
+        if value == "WTF" then
+            Color_Mode.Config.Color_Max = 100
+        elseif value == "I'm blind" then
+            Color_Mode.Config.Color_Max = 1000
+        else
+            Color_Mode.Config.Color_Max = value
+        end
+        file.Write("linventif/color_mode.json", util.TableToJSON(Color_Mode.Config))
+    end
+    Color_Max.Paint = function(s, w, h)
+        draw.RoundedBox(4, 0, 0, w, h, UI_Color.Other)
     end
 end
 

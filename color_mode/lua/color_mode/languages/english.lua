@@ -8,6 +8,7 @@ Color_Mode.Language = {
     Color               =       "Colours",
     Mode_Reset          =       "Reset",
     Mode_Boost          =       "Boost Colors",
+    Color_Max           =       "Boost Color Max",
     Mode_Save           =       "Save Configuration",
     Mode_Load           =       "Load Custom Save",
     Init_Message        =       "This server use Color Mode, to configure them use !color_mode in your chat or use color_mode in your developer console ( F10 or ² ).",

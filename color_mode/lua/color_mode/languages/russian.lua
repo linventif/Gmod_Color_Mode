@@ -9,6 +9,7 @@ Color_Mode.Language = {
     Mode_Reset          =       "Перезагрузить",
     Mode_Boost          =       "Повышение цвета",
     Mode_Save           =       "Сохранить конфигурацию",
+    Color_Max           =       "Boost Color Max",
     Mode_Load           =       "Загрузить пользовательское сохранение",
     Init_Message        =       "Этот сервер использует цветовой режим, для их настройки используйте !color_mode в чате или используйте color_mode в консоли разработчика ( F10 или ² ).",
 --[[       Admin        ]]--
