@@ -39,7 +39,7 @@ if SERVER then
 		include(Folder .. "/server/" .. v)
         print("| Color Mode | File Load | addons/" .. Folder .. "/lua/" .. Folder .. "/server/" .. v)
 	end
-else    
+else
     if !file.Exists("linventif", "data") then
         file.CreateDir("linventif")
         file.Write("linventif/color_mode.json", util.TableToJSON(Color_Mode.Config))
@@ -57,7 +57,7 @@ else
             Color_Mode.Config = Config_Read
         end
     end
-    
+
     include(Folder .. "/languages/" .. Color_Mode.Config.Language .. ".lua")
     print("| Color Mode | File Load | addons/" .. Folder .. "/lua/" .. Folder .. "/languages/" .. string.lower(Color_Mode.Config.Language) .. ".lua")
 
